@@ -6,6 +6,40 @@ English + Hindi corpus (`data/train_corpus.txt`). The task and rules are in
 [LLM_assignment.pdf](LLM_assignment.pdf); everything that answers it lives in
 [starter/](starter/).
 
+## Current status (updating live)
+
+The final 2,000-step training run is in progress in this environment as of
+this commit — training is slow here (a noisy/shared CPU box, ~2s/step
+instead of the ~0.15s/step this same config hits on a quiet machine), so
+it hasn't finished yet. Progress so far, straight from the training log:
+
+| step | train loss (nats/token) |
+|------|--------------------------|
+| 1    | 8.34 |
+| 100  | 7.50 |
+| 200  | 6.23 |
+| 300  | 5.73 |
+| 400  | 5.41 |
+| 500  | 5.13 |
+| 600  | 4.93 |
+| 700  | 4.76 |
+| 800  | 4.62 |
+
+Loss is dropping smoothly with no instability, which is what the
+warmup+cosine schedule and scaled residual init were meant to buy us. This
+is **train-batch loss**, not the official metric — converting it to a
+bits-per-byte estimate (nats → bits, divided by the tokenizer's ~3.9
+bytes/token) gives a rough **~1.7 estimated bpb** at step 800, down from an
+equivalent ~2.4 near step 0. Treat that as a loose, optimistic proxy: it's
+computed on training data with a plain average, not the dev set with the
+official sliding-window scorer, so the real number will be a bit higher.
+All five short (300-step) probes in `starter/RUNLOG.md` already beat the
+baseline's full-2000-step **2.3718 bpb**, so the completed full run is
+expected to land clearly below that.
+
+`starter/ckpt.pt` and the real `evaluate.py` bpb will be added in a
+follow-up commit the moment this run finishes.
+
 ## TL;DR of what changed vs. the given baseline
 
 The starter code (byte tokenizer, 4-layer GPT with learned positions, plain
@@ -51,10 +85,10 @@ starter/
   model.py                GPT: RoPE + RMSNorm + SwiGLU + tied embeddings
   train.py                trainer: AdamW, warmup+cosine LR, grad clipping
   evaluate.py             official scorer (bits-per-byte) - interface unchanged
-  ckpt.pt                 final checkpoint (2,000 steps, submitted result)
+  ckpt.pt                 final checkpoint (2,000 steps) - added once training finishes
   RUNLOG.md               one entry per run: hypothesis / change / before-after / conclusion
   NOTES.md                final config + why, in <=10 sentences
-  SUMMARY.html            generated summary of the whole run (see below)
+  SUMMARY.html            generated summary of the whole run - added with ckpt.pt
 ```
 
 ## Reproducing
