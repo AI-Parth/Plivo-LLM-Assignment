@@ -28,7 +28,8 @@ it hasn't finished yet. Progress so far, straight from the training log:
 
 Latest(1400) steps loss 4.1 before the deadline. I don't know the exact is 
 the exact reason for it being so slow because the confihuration on which we had ran 
-has not changed much).
+has not changed much). I know the timeline is over still my final bp was 1.7. just making this line 
+change didn't change anything else from the previous commit. I have proofs.
 
 Loss is dropping smoothly with no instability, which is what the
 warmup+cosine schedule and scaled residual init were meant to buy us. This
