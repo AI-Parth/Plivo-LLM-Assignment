@@ -86,7 +86,5 @@ python evaluate.py --checkpoint ckpt.pt --text_file ../data/dev_eval.txt
 
 ## Tools disclosure
 
-Built with an AI coding agent (GitHub Copilot / Claude) driving the
-exploration, implementation, and experiment loop, with a human reviewing
-and directing each decision. See `starter/SUMMARY.html` for the detailed
-human-vs-machine breakdown.
+AI coding agents(copilot) are used, research by an AI and human is done on kaggle
+and other platforms.
